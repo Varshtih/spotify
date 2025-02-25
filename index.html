@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vspotify</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="images/logo.svg">
+</head>
+
+<body>
+    <div class="top">
+
+        <div class="top-left">
+            <div class="spotify-icon">
+                <img class="filter" src="images/logo.svg" alt="">
+            </div>
+            <div>
+                <img class="filter hamburger" src="images/hamburger.svg" alt="">
+            </div>
+        </div>
+        <div class="top-middle">
+            <div class="home-butt">
+                <img class="filter hover" style="width: 20px;" src="images/home.svg" alt="">
+            </div>
+            <div class="search-bar">
+                <img class="filter hover" style="width: 20px;" src="images/search.svg" alt="">
+                <input type="text" class="search" placeholder="What do you want to play ?">
+                <img class="filter hover" style="width: 20px;" src="images/browse.svg" alt="">
+            </div>
+        </div>
+        <div class="top-right">
+            <button class="explore hover">Explore Premium</button>
+            <div class="install hover">
+                <img class="filter hover" style="width: 20px;" src="images/install.svg" alt="">
+                <button class="install-butt">Install App</button>
+            </div>
+            <div class="notification">
+                <img class="filter hover" style="width: 20px;" src="images/notification.svg" alt="">
+            </div>
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="left">
+            <div class="library">
+                <img style="width: 20px;" class="filter hover" src="images/library.svg" alt="">
+                <h4 style="color: white;">Your Library</h4>
+                <img src="images/plu.svg" class="filter hover" style="width: 20px;">
+            </div>
+            <div class="songlist">
+                <ul style="color: white;">
+                </ul>
+            </div>
+        </div>
+
+        <div class="right">
+            <h2 style="color:white;margin-left: 10px;">Your Playlists</h2>
+            <div class="playlist-container">
+
+            </div>
+
+            <div class="play">
+
+                <div class="above-bar">
+                    <div class="song-info">
+
+                    </div>
+
+                    <div class="buttons">
+                        <div class="prev hover filter"><img id="prev" src="images/prev.svg" alt=""></div>
+                        <div class="current hover"><img width="20px" id="play"
+                                src="images/playbutton.svg" alt=""></div>
+                        <div class="next hover filter"><img id="next" src="images/next.svg" alt=""></div>
+                    </div>
+
+                    <div class="songtime">
+
+                    </div>
+                    <div class="vol">
+                        <div class="volume-icon">
+                            <img class="volumeimg filter" width="20px" src="images/volume.svg" alt="">
+                        </div>
+                        <div class="vol-bar">
+                            <input type="range" name="volume">
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="seek-bar">
+                    <div class="circle">
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>
