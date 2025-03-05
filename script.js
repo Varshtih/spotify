@@ -17,7 +17,7 @@ async function getsongs(folder) {
     currFolder = folder;
 
     // Fetch song list (HTML)
-    let songResponse = await fetch(`/${currFolder}/`);
+    let songResponse = await fetch(`spotify/${currFolder}/`);
     let songText = await songResponse.text();
     //console.log(songText)
     let div = document.createElement('div');
@@ -37,7 +37,7 @@ async function getsongs(folder) {
     // Fetch album metadata (JSON)
     let metadata = {};
     try {
-        let metaResponse = await fetch(`/${currFolder}/info.json`);
+        let metaResponse = await fetch(`spotify/${currFolder}/info.json`);
         metadata = await metaResponse.json();
     } catch (error) {
         console.warn("No metadata found for", folder);
@@ -104,7 +104,7 @@ function playmusic(track, pause = false) {
 
 
 async function displayalbums() {
-    let response = await fetch(`/songs/`);
+    let response = await fetch(`spotify/songs/`);
     let text = await response.text();
     let div = document.createElement('div');
     div.innerHTML = text;
@@ -117,7 +117,7 @@ async function displayalbums() {
     for (const e of array) {
         if (e.href.includes("/songs/")) {
             let folder = e.href.split('/').slice(-2)[0];
-            let metaResponse = await fetch(`/songs/${folder}/info.json`);
+            let metaResponse = await fetch(`spotify/songs/${folder}/info.json`);
             let metadata = await metaResponse.json();
 
             playcontainer.innerHTML += `
