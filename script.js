@@ -17,7 +17,7 @@ async function getsongs(folder) {
     currFolder = folder;
 
     // Fetch song list (HTML)
-    let songResponse = await fetch(`songs/${currFolder}/`);
+    let songResponse = await fetch(`/${currFolder}/`);
     let songText = await songResponse.text();
     //console.log(songText)
     let div = document.createElement('div');
@@ -37,7 +37,7 @@ async function getsongs(folder) {
     // Fetch album metadata (JSON)
     let metadata = {};
     try {
-        let metaResponse = await fetch(`songs/${currFolder}/info.json`);
+        let metaResponse = await fetch(`/${currFolder}/info.json`);
         metadata = await metaResponse.json();
     } catch (error) {
         console.warn("No metadata found for", folder);
