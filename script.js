@@ -104,7 +104,7 @@ function playmusic(track, pause = false) {
 
 
 async function displayalbums() {
-    let response = await fetch(`spotify/songs/`);
+    let response = await fetch(`/songs/`);
     let text = await response.text();
     let div = document.createElement('div');
     div.innerHTML = text;
