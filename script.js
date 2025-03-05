@@ -17,7 +17,7 @@ async function getsongs(folder) {
     currFolder = folder;
 
     // Fetch song list (HTML)
-    let songResponse = await fetch(`/${folder}/`);
+    let songResponse = await fetch(`/${currFolder}/`);
     let songText = await songResponse.text();
     //console.log(songText)
     let div = document.createElement('div');
