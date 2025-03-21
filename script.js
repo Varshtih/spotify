@@ -1,9 +1,8 @@
-
 const currentsong = new Audio();
 let songs;
 let currFolder;
 function formatTime(seconds) {
-    let roundedSeconds = Math.floor(seconds); // Ignore milliseconds and extra values
+    let roundedSeconds = Math.floor(seconds);
     let minutes = Math.floor(roundedSeconds / 60);
     let remainingSeconds = roundedSeconds % 60;
 
@@ -17,12 +16,10 @@ async function getsongs(folder) {
     currFolder = folder;
 
     // Fetch song list (HTML)
-    let songResponse = await fetch(`/${currFolder}/`);
+    let songResponse = await fetch(`https://varshith.github.io/spotify/${currFolder}/`);
     let songText = await songResponse.text();
-    //console.log(songText)
     let div = document.createElement('div');
     div.innerHTML = songText;
-    // console.log(div)
     let as = div.getElementsByTagName('a');
 
     songs = [];
@@ -32,12 +29,11 @@ async function getsongs(folder) {
             songs.push(element.href.split(`/${currFolder}/`)[1]);
         }
     }
-    //console.log(songs);
 
     // Fetch album metadata (JSON)
     let metadata = {};
     try {
-        let metaResponse = await fetch(`/${currFolder}/info.json`);
+        let metaResponse = await fetch(`https://varshith.github.io/spotify/${currFolder}/info.json`);
         metadata = await metaResponse.json();
     } catch (error) {
         console.warn("No metadata found for", folder);
@@ -71,7 +67,7 @@ async function getsongs(folder) {
 }
 
 function playmusic(track, pause = false) {
-    currentsong.src = `/${currFolder}/` + track;
+    currentsong.src = `https://varshith.github.io/spotify/${currFolder}/` + track;
 
     if (!pause) {
         currentsong.play();
@@ -81,7 +77,7 @@ function playmusic(track, pause = false) {
     document.querySelector('.song-info').innerHTML = decodeURI(track);
     document.querySelector('.songtime').innerHTML = '00:00/00:00';
 
-    // Update album play button (ONLY for the active album)
+    // Update album play button
     document.querySelectorAll('.pb').forEach(button => {
         if (button.closest('.play-container').dataset.set === currFolder) {
             button.src = 'images/pause.svg';
@@ -90,7 +86,6 @@ function playmusic(track, pause = false) {
         }
     });
 
-    // When song is paused or ends, reset play button
     currentsong.onpause = () => {
         play.src = 'images/playbutton.svg';
         document.querySelectorAll('.pb').forEach(button => {
@@ -101,10 +96,8 @@ function playmusic(track, pause = false) {
     };
 }
 
-
-
 async function displayalbums() {
-    let response = await fetch(`/songs/`);
+    let response = await fetch(`https://varshith.github.io/spotify/songs/`);
     let text = await response.text();
     let div = document.createElement('div');
     div.innerHTML = text;
@@ -117,7 +110,7 @@ async function displayalbums() {
     for (const e of array) {
         if (e.href.includes("/songs/")) {
             let folder = e.href.split('/').slice(-2)[0];
-            let metaResponse = await fetch(`songs/${folder}/info.json`);
+            let metaResponse = await fetch(`https://varshith.github.io/spotify/songs/${folder}/info.json`);
             let metadata = await metaResponse.json();
 
             playcontainer.innerHTML += `
@@ -135,57 +128,46 @@ async function displayalbums() {
     // Add event listeners to album play buttons
     document.querySelectorAll('.play-container .pb').forEach(button => {
         button.addEventListener("click", async (e) => {
-            e.stopPropagation(); // Prevent bubbling up to album div
+            e.stopPropagation();
             
             let albumDiv = e.currentTarget.closest('.play-container');
             let folder = albumDiv.dataset.set;
 
             if (currFolder === `songs/${folder}` && !currentsong.paused) {
-                // Pause the current album if it's already playing
                 currentsong.pause();
                 e.currentTarget.src = 'images/playbutton.svg';
-                play.src = 'images/playbutton.svg'; // Sync main player button
+                play.src = 'images/playbutton.svg';
             } else {
-                // Load new album and play first song
                 songs = await getsongs(`songs/${folder}`);
                 playmusic(songs[0]);
 
-                // Reset all album play buttons before updating the clicked one
                 document.querySelectorAll('.pb').forEach(btn => btn.src = 'images/playbutton.svg');
-                
                 e.currentTarget.src = 'images/pause.svg';
-                play.src = 'images/pause.svg'; // Sync main player button
+                play.src = 'images/pause.svg';
             }
         });
     });
 }
 
-
-
 async function main() {
     await getsongs("songs/ab");
     displayalbums();
-
     playmusic(songs[0], true);
-
 
     play.addEventListener("click", () => {
         if (currentsong.paused) {
             currentsong.play();
             play.src = 'images/pause.svg';
-            
-            // Update only the currently playing song’s button
+
             document.querySelectorAll('.pb').forEach(button => {
                 if (button.closest('.play-container').dataset.set === currFolder.split('/')[1]) {
                     button.src = 'images/pause.svg';
                 }
             });
-    
         } else {
             currentsong.pause();
             play.src = 'images/playbutton.svg';
-            
-            // Pause only the active song’s play button
+
             document.querySelectorAll('.pb').forEach(button => {
                 if (button.closest('.play-container').dataset.set === currFolder.split('/')[1]) {
                     button.src = 'images/playbutton.svg';
@@ -193,7 +175,6 @@ async function main() {
             });
         }
     });
-    
 
     prev.addEventListener("click", () => {
         let index = songs.indexOf(currentsong.src.split("/").slice(-1)[0]);
@@ -211,21 +192,16 @@ async function main() {
         }
     });
 
-
-
     currentsong.addEventListener("timeupdate", () => {
         document.querySelector('.songtime').innerHTML = `${formatTime(currentsong.currentTime)}/${formatTime(currentsong.duration)}`;
         document.querySelector('.circle').style.left = (currentsong.currentTime / currentsong.duration) * 100 + "%";
     });
-
-
 
     document.querySelector('.seek-bar').addEventListener("click", (e) => {
         const percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
         document.querySelector('.circle').style.left = percent + "%";
         currentsong.currentTime = ((currentsong.duration) * percent) / 100;
     });
-
 
     let hamburger = true;
     document.querySelector('.hamburger').addEventListener("click", () => {
@@ -240,7 +216,7 @@ async function main() {
             b2.style.width = "75%";
             hamburger = false;
         }
-        else if (!hamburger) {
+        else {
             b.style.left = "-100%";
             b.style.transition = "all 1.3s ease";
             b1.style.marginLeft = "2vw";
@@ -248,12 +224,11 @@ async function main() {
             b2.style.width = "95%";
             hamburger = true;
         }
-    })
+    });
 
     document.querySelector('.vol-bar').getElementsByTagName('input')[0].addEventListener("change", (e) => {
-        //console.log(e, e.target.value);
         currentsong.volume = parseInt(e.target.value) / 100;
-    })
+    });
 
     document.querySelector('.volumeimg').addEventListener("click", e => {
         if (e.target.src.includes("images/volume.svg")) {
@@ -266,7 +241,6 @@ async function main() {
             document.querySelector('.vol-bar').getElementsByTagName('input')[0].value = 10;
             currentsong.volume = .10;
         }
-    })
-
+    });
 }
 main();
